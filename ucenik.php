@@ -27,33 +27,36 @@ class Ucenik
     private $ime;
     private $prezime;
     private $datumRodjenja;
-
+    
     public function __construct($ime, $prezime, $datumRodjenja)
     {
         $this->ime = $ime;
         $this->prezime = $prezime;
         $this->datumRodjenja = $datumRodjenja;
     }
-
+    
     public function getIme()
     {
         return $this->ime;
     }
-
+    
     public function getPrezime()
     {
         return $this->prezime;
     }
-
+    
     public function brojDanaOdDatumaRodjenja()
     {
         $datumRodjenjaObj = new DateTime($this->datumRodjenja);
-        
         $danasnji = new DateTime();
         
-        $razlika = $danasnji->diff($datumRodjenjaObj);
+        $razlikaUSek = $danasnji->getTimestamp() - $datumRodjenjaObj->getTimestamp();
         
-        return abs($razlika->days);
+        $razlikaUSek = abs($razlikaUSek); 
+        $razlikaUDanima = $razlikaUSek / (60 * 60 * 24);
+        $razlikaUDanima = floor($razlikaUDanima);
+        
+        return $razlikaUDanima;
     }
 }
 
@@ -61,13 +64,13 @@ if (isset($_POST['submit'])) {
     $ime = $_POST["ime"];
     $prezime = $_POST["prezime"];
     $datumRodjenja = $_POST["datumRodjenja"];
-
-        $ucenik = new Ucenik($ime, $prezime, $datumRodjenja);
-        
-        echo "<hr>";
-        echo "<h2>Podaci o učeniku:</h2>";
-        echo "<p><strong>Ime:</strong> " . $ucenik->getIme() . "</p>";
-        echo "<p><strong>Prezime:</strong> " . $ucenik->getPrezime() . "</p>";
-        echo "<p><strong>Broj dana od datuma rođenja:</strong> " . $ucenik->brojDanaOdDatumaRodjenja() . " dana</p>";
-    }
+    
+    $ucenik = new Ucenik($ime, $prezime, $datumRodjenja);
+    
+    echo "<hr>";
+    echo "<h2>Podaci o učeniku:</h2>";
+    echo "<p><strong>Ime:</strong> " . $ucenik->getIme() . "</p>";
+    echo "<p><strong>Prezime:</strong> " . $ucenik->getPrezime() . "</p>";
+    echo "<p><strong>Broj dana od datuma rođenja:</strong> " . $ucenik->brojDanaOdDatumaRodjenja() . " dana</p>";
+}
 ?>
